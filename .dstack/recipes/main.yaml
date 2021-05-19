@@ -1,0 +1,64 @@
+steps:
+  - id: download_model
+    params:
+      id: model
+      default: 124M
+      values:
+        - 124M
+        - 355M
+        - 774M
+        - 1558M
+    image: tensorflow/tensorflow:1.12.0-py3
+    commands:
+      - pip3 install -r requirements.txt
+      - python3 download_model.py $model
+    artifacts:
+      - path: models/$model
+
+#  - id: download_dataset
+#      commands:
+#        - wget https://github.com/karpathy/char-rnn/blob/master/data/tinyshakespeare/input.txt
+#      artifacts:
+#        - path: input.txt
+
+  - id: train_model
+    image: tensorflow/tensorflow:1.12.0-py3
+    params:
+      id: model
+      default: 124M
+      values:
+        - 124M
+        - 355M
+        - 774M
+        - 1558M
+    dependencies:
+      - id: download_model
+        params:
+          - id: model
+            value: $model
+      - id: download_dataset
+        repo: 
+    commands:
+      - pip3 install -r requirements.txt
+      - python train.py --model $model
+    artifacts:
+      - path: models/$model
+
+  - id: generate_sample
+    image: tensorflow/tensorflow:1.12.0-py3
+    params:
+      id: model
+      default: 124M
+      values:
+        - 124M
+        - 355M
+        - 774M
+        - 1558M
+    dependencies:
+      - id: train_model
+        params:
+          - id: model
+            value: $model
+    commands:
+      - pip3 install -r requirements.txt
+      - python generate_sample.py --model $model

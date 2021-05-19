@@ -1,0 +1,31 @@
+workflows:
+  - id: download_model
+    params:
+      - id: model
+        default: 124M
+    image: tensorflow/tensorflow:1.12.0-py3
+    commands:
+      - pip install -r requirements.txt
+      - python download_model.py $model
+    artifacts:
+      - models/$model
+  - id: finetune_model
+    image: tensorflow/tensorflow:1.12.0-py3
+    params:
+      - id: model
+        default: 124M
+      - id: batch_size
+        default: 1
+      - id: learning_rate
+        default: 0.00002
+    dependencies:
+      - id: download_model
+        params:
+          - model: $model
+      - id: download_dataset
+        repo: https://github.com/dstackai/dstack-examples/datasets
+    commands:
+      - pip install -r requirements.txt
+      - PYTHONPATH=src python3 train.py --model $model --dataset input.txt --batch_size $batch_size --learning_rate $learning_rate
+    artifacts:
+      - models/$model
