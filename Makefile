@@ -1,0 +1,2 @@
+finetune_model:
+    docker run -it --rm -v $(pwd):/dstack-run-1 -w /dstack-run-1 tensorflow/tensorflow:1.15.0-py3 bash -c "pip3 install -r requirements.txt; PYTHONPATH=src python3 train.py --dataset input.npz"

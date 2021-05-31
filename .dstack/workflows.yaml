@@ -1,36 +1,40 @@
 workflows:
-  - id: download_model
+  - name: download_model
     params:
-      - id: model
+      - name: model
         default: 124M
-    image: tensorflow/tensorflow:1.12.0-py3
+    image: tensorflow/tensorflow:1.15.0-py3
     commands:
       - pip install -r requirements.txt
       - python download_model.py $model
     artifacts:
       - models/$model
-  - id: download_dataset
-    image: tensorflow/tensorflow:1.12.0-py3
+  - name: download_dataset
+    image: tensorflow/tensorflow:1.15.0-py3
     commands:
       - wget https://github.com/karpathy/char-rnn/blob/master/data/tinyshakespeare/input.txt
+      - pip install -r requirements.txt
+      - PYTHONPATH=src ./encode.py input.txt input.npz
     artifacts:
-      - input.txt
-  - id: finetune_model
-    image: tensorflow/tensorflow:1.12.0-py3
+      - input.npz
+  - name: finetune_model
+    image: tensorflow/tensorflow:1.15.0-py3
     params:
-      - id: model
+      - name: model
         default: 124M
-      - id: batch_size
+      - name: batch_size
         default: 1
-      - id: learning_rate
+      - name: learning_rate
         default: 0.00002
     dependencies:
-      - id: download_model
+      - name: download_model
         params:
           - model: $model
-      - id: download_dataset
+      - name: download_dataset
     commands:
       - pip install -r requirements.txt
-      - PYTHONPATH=src python3 train.py --model $model --dataset input.txt --batch_size $batch_size --learning_rate $learning_rate
+      - PYTHONPATH=src python3 train.py --model $model --dataset input.npz --batch_size $batch_size --learning_rate $learning_rate
     artifacts:
       - models/$model
+      - checkpoint
+      - samples
