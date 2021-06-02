@@ -1,0 +1,30 @@
+configs:
+  global:
+    model: 124M
+    models_dir: model
+
+  finetune_model:
+    dataset: input.npz
+    combine: 50000
+    encoding: utf-8
+    batch_size: 1
+    learning_rate: 0.00002
+    accumulate_gradients: 1
+    memory_saving_gradients: False
+    twremat: False
+    twremat_memlimit: 12GB
+    only_train_transformer_layers: False
+    optimizer: adam
+    noise: 0.0
+    top_k: 40
+    top_p: 0.0
+    restore_from: latest
+    run_name: run1
+    sample_every: 100
+    sample_length: 1023
+    sample_num: 1
+    save_every: 1000
+    val_dataset: None
+    val_batch_size: 2
+    val_batch_count: 40
+    val_every: 0

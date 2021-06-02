@@ -1,14 +1,12 @@
 workflows:
   - name: download_model
-    params:
-      - name: model
-        default: 124M
     image: tensorflow/tensorflow:1.15.0-py3
     commands:
       - pip3 install -r requirements.txt
       - python3 download_model.py $model
     artifacts:
       - models/$model
+
   - name: prepare_dataset
     image: tensorflow/tensorflow:1.15.0-py3
     commands:
@@ -17,23 +15,15 @@ workflows:
       - PYTHONPATH=src ./encode.py --model_name $model input.txt input.npz
     artifacts:
       - input.npz
+
   - name: finetune_model
     image: tensorflow/tensorflow:1.15.0-py3
-    params:
-      - name: model
-        default: 124M
-      - name: batch_size
-        default: 1
-      - name: learning_rate
-        default: 0.00002
     dependencies:
-      - name: download_model
-        params:
-          - model
-      - name: prepare_dataset
+        - download_model
+        - prepare_dataset
     commands:
       - pip3 install -r requirements.txt
-      - PYTHONPATH=src python3 train.py --model_name $model --dataset input.npz --batch_size $batch_size --learning_rate $learning_rate
+      - PYTHONPATH=src python3 train.py --model_name $model $config_args
     artifacts:
       - models/$model
       - checkpoint
