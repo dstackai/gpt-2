@@ -4,23 +4,35 @@ workflows:
     commands:
       - pip3 install -r requirements.txt
       - python3 download_model.py $model
+    triggers:
+      - repo:
+          include:
+            - requirements.txt
+            - download_model.py
     artifacts:
       - models/$model
 
-  - name: prepare_dataset
+  - name: encode_dataset
     image: tensorflow/tensorflow:1.15.0-py3
     commands:
       - curl -O https://github.com/karpathy/char-rnn/blob/master/data/tinyshakespeare/input.txt
       - pip3 install -r requirements.txt
       - PYTHONPATH=src ./encode.py --model_name $model input.txt input.npz
+    triggers:
+      - repo:
+          include:
+            - requirements.txt
+            - encode.py
+    depends-on:
+      - download_model
     artifacts:
       - input.npz
 
   - name: finetune_model
     image: tensorflow/tensorflow:1.15.0-py3
-    dependencies:
-        - download_model
-        - prepare_dataset
+    depends-on:
+      - download_model
+      - encode_dataset
     commands:
       - pip3 install -r requirements.txt
       - PYTHONPATH=src python3 train.py --model_name $model $config_args
