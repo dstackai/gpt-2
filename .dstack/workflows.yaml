@@ -1,5 +1,5 @@
 workflows:
-  - name: download_model
+  - name: download-model
     image: tensorflow/tensorflow:1.15.0-py3
     commands:
       - pip3 install -r requirements.txt
@@ -12,7 +12,7 @@ workflows:
     artifacts:
       - models/$model
 
-  - name: encode_dataset
+  - name: encode-dataset
     image: tensorflow/tensorflow:1.15.0-py3
     commands:
       - curl -O https://github.com/karpathy/char-rnn/blob/master/data/tinyshakespeare/input.txt
@@ -23,12 +23,14 @@ workflows:
         include:
           - requirements.txt
           - encode.py
+          - src/load_dataset.py
+          - src/encoder.py
       workflows:
         - download_model
     artifacts:
       - input.npz
 
-  - name: finetune_model
+  - name: finetune-model
     image: tensorflow/tensorflow:1.15.0-py3
     depends-on:
       workflows:
@@ -36,8 +38,8 @@ workflows:
         - encode_dataset
     commands:
       - pip3 install -r requirements.txt
-      - PYTHONPATH=src python3 train.py --model_name $model $config_args
+      - PYTHONPATH=src python3 train.py --run_name $job_name --model_name $model --dataset input.npz $config_args
     artifacts:
       - models/$model
-      - checkpoint
-      - samples
+      - checkpoint/$job_name
+      - samples/$job_name
