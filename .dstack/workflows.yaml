@@ -26,7 +26,7 @@ workflows:
           - src/load_dataset.py
           - src/encoder.py
       workflows:
-        - download_model
+        - download-model
     artifacts:
       - input.npz
 
@@ -34,8 +34,8 @@ workflows:
     image: tensorflow/tensorflow:1.15.0-py3
     depends-on:
       workflows:
-        - download_model
-        - encode_dataset
+        - download-model
+        - encode-dataset
     commands:
       - pip3 install -r requirements.txt
       - PYTHONPATH=src python3 train.py --run_name $job_name --model_name $model --dataset input.npz $config_args
