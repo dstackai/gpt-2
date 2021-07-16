@@ -3,7 +3,7 @@ configs:
     model: 124M
     models_dir: model
 
-  finetune_model:
+  finetune-model:
     dataset: input.npz
     combine: 50000
     encoding: utf-8
