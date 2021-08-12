@@ -10,10 +10,7 @@ configs:
     batch_size: 1
     learning_rate: 0.00002
     accumulate_gradients: 1
-    memory_saving_gradients: False
-    twremat: False
     twremat_memlimit: 12GB
-    only_train_transformer_layers: False
     optimizer: adam
     noise: 0.0
     top_k: 40
