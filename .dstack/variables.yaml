@@ -1,4 +1,4 @@
-configs:
+variables:
   global:
     model: 124M
     models_dir: model
