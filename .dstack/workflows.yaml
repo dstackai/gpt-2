@@ -38,8 +38,7 @@ workflows:
         - encode-dataset
     commands:
       - pip3 install -r requirements.txt
-      - PYTHONPATH=src python3 train.py --run_name $job_id --model_name $model --dataset input.npz $variables_as_args
+      - PYTHONPATH=src python3 train.py --run_name $run_name --model_name $model --dataset input.npz $variables_as_args
     artifacts:
-      - models/$model
-      - checkpoint/$job_id
-      - samples/$job_id
+      - checkpoint/$run_name
+      - samples/$run_name
