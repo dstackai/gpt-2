@@ -16,7 +16,7 @@ workflows:
     commands:
       - curl -O https://github.com/karpathy/char-rnn/blob/master/data/tinyshakespeare/input.txt
       - pip3 install -r requirements.txt
-      - mkdir datasets
+      - mkdir -p datasets
       - PYTHONPATH=src ./encode.py --model_name $model input.txt datasets/input.npz
     depends-on:
       repo:

@@ -4,7 +4,6 @@ variables:
     models_dir: model
 
   finetune-model:
-    dataset: input.npz
     combine: 50000
     encoding: utf-8
     batch_size: 1
