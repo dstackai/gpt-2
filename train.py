@@ -61,6 +61,7 @@ parser.add_argument('--sample_every', metavar='N', type=int, default=100, help='
 parser.add_argument('--sample_length', metavar='TOKENS', type=int, default=1023, help='Sample this many tokens')
 parser.add_argument('--sample_num', metavar='N', type=int, default=1, help='Generate this many samples')
 parser.add_argument('--save_every', metavar='N', type=int, default=1000, help='Write a checkpoint every N steps')
+parser.add_argument('--fail_after', metavar='N', type=int, default=0, help='Fail after N steps')
 
 parser.add_argument('--val_dataset', metavar='PATH', type=str, default=None, help='Dataset for validation loss, defaults to --dataset.')
 parser.add_argument('--val_batch_size', metavar='SIZE', type=int, default=2, help='Batch size for validation.')
@@ -280,6 +281,8 @@ def main():
 
         try:
             while True:
+                if 0 < args.fail_after < counter:
+                    exit(f"Failed due to counter > {args.fail_after}")
                 if counter % args.save_every == 0:
                     save()
                 if counter % args.sample_every == 0:

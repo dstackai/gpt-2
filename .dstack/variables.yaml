@@ -19,6 +19,7 @@ variables:
     sample_length: 1023
     sample_num: 1
     save_every: 1000
+    fail_after: 0
     val_batch_size: 2
     val_batch_count: 40
     val_every: 0
