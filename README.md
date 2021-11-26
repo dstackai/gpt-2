@@ -11,8 +11,8 @@ PYTHONPATH=src ./train.py --dataset <file|directory|glob>
 If you want to precompute the dataset's encoding for multiple runs, you can instead use:
 
 ```
-PYTHONPATH=src ./encode.py <file|directory|glob> /path/to/encoded.npz
-PYTHONPATH=src ./train.py --dataset /path/to/encoded.npz
+PYTHONPATH=src ./encode.py <file|directory|glob> /path/to/encoded.npy
+PYTHONPATH=src ./train.py --dataset /path/to/encoded.npy
 ```
 
 Make sure `cudnn` is installed. [Some have

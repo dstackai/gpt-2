@@ -22,8 +22,11 @@ def load_dataset(enc, path, combine, encoding=None):
     token_chunks = []
     raw_text = ''
     for path in tqdm.tqdm(paths):
-        if path.endswith('.npz'):
-            # Pre-encoded
+        if path.endswith('.npy'):
+            # Pre-encoded, uncompressed
+            token_chunks.append(np.load(path))
+        elif path.endswith('.npz'):
+            # Pre-encoded, compressed
             with np.load(path) as npz:
                 for item in npz.files:
                     token_chunks.append(npz[item])
