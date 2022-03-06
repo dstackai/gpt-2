@@ -18,7 +18,7 @@ workflows:
       - curl -O https://github.com/karpathy/char-rnn/blob/master/data/tinyshakespeare/input.txt
       - pip3 install -r requirements.txt
       - mkdir -p datasets
-      - PYTHONPATH=src ./encode.py --model_name $model input.txt datasets/input.npy
+      - PYTHONPATH=src ./encode.py --model $model input.txt datasets/input.npy
     artifacts:
       - datasets
     depends-on:
@@ -35,7 +35,7 @@ workflows:
     image: tensorflow/tensorflow:1.15.0-py3
     commands:
       - pip3 install -r requirements.txt
-      - PYTHONPATH=src python3 train.py --run_name $run_name --model_name $model --dataset datasets/input.npy $variables_as_args
+      - PYTHONPATH=src python3 train.py --run_name $run_name --dataset datasets/input.npy $variables_as_args
     artifacts:
       - checkpoint
       - samples

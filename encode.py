@@ -21,7 +21,7 @@ parser.add_argument('out_npy', metavar='OUT.npy', type=str, help='Output file pa
 
 def main():
     args = parser.parse_args()
-    enc = encoder.get_encoder(args.model_name, models_dir=args.models_dir)
+    enc = encoder.get_encoder(args.model, models_dir=args.models_dir)
     print('Reading files')
     chunks = load_dataset(enc, args.in_text, args.combine, encoding=args.encoding)
     print('Writing', args.out_npy)

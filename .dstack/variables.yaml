@@ -1,7 +1,7 @@
 variables:
   global:
     model: 124M
-    models_dir: model
+    models_dir: models
 
   finetune-model:
     combine: 50000

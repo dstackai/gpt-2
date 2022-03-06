@@ -37,7 +37,7 @@ parser = argparse.ArgumentParser(
     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
 parser.add_argument('--dataset', metavar='PATH', type=str, required=True, help='Input file, directory, or glob pattern (utf-8 text, or preencoded .npz files).')
-parser.add_argument('--model_name', metavar='MODEL', type=str, default='124M', help='Pretrained model name')
+parser.add_argument('--model', metavar='MODEL', type=str, default='124M', help='Pretrained model name')
 parser.add_argument('--models_dir', metavar='PATH', type=str, default='models', help='Path to models directory')
 parser.add_argument('--combine', metavar='CHARS', type=int, default=50000, help='Concatenate input files with <|endoftext|> separator into chunks of this minimum size')
 parser.add_argument('--encoding', type=str, default='utf-8', help='Set the encoding for reading and writing files.')
@@ -86,9 +86,9 @@ def randomize(context, hparams, p):
 
 def main():
     args = parser.parse_args()
-    enc = encoder.get_encoder(args.model_name, models_dir=args.models_dir)
+    enc = encoder.get_encoder(args.model, models_dir=args.models_dir)
     hparams = model.default_hparams()
-    with open(os.path.join('models', args.model_name, 'hparams.json')) as f:
+    with open(os.path.join('models', args.model, 'hparams.json')) as f:
         hparams.override_from_dict(json.load(f))
 
     if args.sample_length > hparams.n_ctx:
@@ -178,10 +178,10 @@ def main():
             if ckpt is None:
                 # Get fresh GPT weights if new run.
                 ckpt = tf.train.latest_checkpoint(
-                    os.path.join('models', args.model_name))
+                    os.path.join('models', args.model))
         elif args.restore_from == 'fresh':
             ckpt = tf.train.latest_checkpoint(
-                os.path.join('models', args.model_name))
+                os.path.join('models', args.model))
         else:
             ckpt = tf.train.latest_checkpoint(args.restore_from)
         print('Loading checkpoint', ckpt)
